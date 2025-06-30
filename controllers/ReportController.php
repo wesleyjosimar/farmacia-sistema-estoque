@@ -84,10 +84,14 @@ class ReportController extends Controller
             $html .= '</tr>';
         }
         $html .= '</table>';
-        $pdf = new \mPDF();
-        $pdf->WriteHTML($html);
-        $pdf->Output('estoque_' . date('Ymd_His') . '.pdf', 'D');
-        exit;
+        if (class_exists('\\Mpdf\\Mpdf')) {
+            $pdf = new \Mpdf\Mpdf();
+            $pdf->WriteHTML($html);
+            $pdf->Output('estoque_' . date('Ymd_His') . '.pdf', 'D');
+            exit;
+        } else {
+            return $this->renderContent('<div class="alert alert-danger">A extensão mPDF não está instalada. Instale via composer: <code>composer require mpdf/mpdf</code></div>' . $html);
+        }
     }
 
     public function actionExportEstoqueXlsx()
@@ -179,8 +183,8 @@ class ReportController extends Controller
             $html .= '</tr>';
         }
         $html .= '</table>';
-        if (class_exists('mPDF')) {
-            $pdf = new \mPDF();
+        if (class_exists('\\Mpdf\\Mpdf')) {
+            $pdf = new \Mpdf\Mpdf();
             $pdf->WriteHTML($html);
             $pdf->Output('movimentacoes_' . date('Ymd_His') . '.pdf', 'D');
             exit;
