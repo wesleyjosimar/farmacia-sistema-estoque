@@ -1,5 +1,7 @@
 # Sistema de Estoque para Farmácia
 
+[Repositório no GitHub](https://github.com/wesleyjosimar/farmacia-sistema-estoque.git)
+
 <!--
 Comentário feito por um aluno da 5ª fase de Ciência da Computação:
 Este projeto é um sistema de controle de estoque para farmácias. Ele foi desenvolvido para ajudar a gerenciar produtos, movimentações de estoque, usuários e auditorias de ações no sistema. O objetivo é facilitar o controle de entrada e saída de produtos, evitando perdas e melhorando a organização.
@@ -117,8 +119,8 @@ Esse projeto é uma ótima base para aprender sobre desenvolvimento web, MVC, au
 ### 2. Clonar o repositório
 ```bash
 # Clone o projeto do GitHub
-git clone https://github.com/seu-usuario/seu-repositorio.git
-cd seu-repositorio
+git clone https://github.com/wesleyjosimar/farmacia-sistema-estoque.git
+cd farmacia-sistema-estoque
 ```
 
 ### 3. Configurar variáveis de ambiente (se necessário)
