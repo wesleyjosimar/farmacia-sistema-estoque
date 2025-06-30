@@ -20,13 +20,36 @@ Este projeto consiste em um sistema web de controle de estoque para farmácia, d
 
 ## Tecnologias Utilizadas
 <!--
-Aqui usamos o framework Yii2 (PHP), que é muito utilizado para criar aplicações web de forma rápida e organizada. Também utilizamos banco de dados relacional (MySQL ou MariaDB), HTML, CSS e um pouco de JavaScript para a interface.
+Aqui usamos o framework Yii2 (PHP), que é muito utilizado para criar aplicações web de forma rápida e organizada. Também utilizamos banco de dados relacional (PostgreSQL), HTML, CSS e um pouco de JavaScript para a interface.
 -->
 
 - **PHP (Yii2 Framework)**: Para a lógica do sistema e organização do código.
-- **MySQL/MariaDB**: Para armazenar os dados dos produtos, usuários, movimentações, etc.
+- **PostgreSQL**: Para armazenar os dados dos produtos, usuários, movimentações, etc.
 - **HTML/CSS/JS**: Para a parte visual do sistema.
 - **Docker**: Para facilitar a configuração do ambiente de desenvolvimento.
+
+## Banco de Dados
+
+Este sistema utiliza **PostgreSQL** como banco de dados relacional.
+
+Você pode criar as tabelas de duas formas:
+
+### 1. Usando as migrations do Yii2 (recomendado)
+
+Execute o comando abaixo na raiz do projeto:
+
+```bash
+# Usando Docker:
+docker-compose exec app php yii migrate
+# Ou localmente:
+php yii migrate
+```
+
+Isso criará todas as tabelas automaticamente conforme o código do sistema.
+
+### 2. Criando manualmente (caso prefira)
+
+Você pode executar os comandos SQL do arquivo [`docs/criacao-tabelas.sql`](docs/criacao-tabelas.sql) no seu banco PostgreSQL para criar as tabelas manualmente.
 
 ## Funcionalidades Principais
 <!--
