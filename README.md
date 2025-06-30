@@ -28,6 +28,57 @@ Aqui usamos o framework Yii2 (PHP), que é muito utilizado para criar aplicaçõ
 - **HTML/CSS/JS**: Para a parte visual do sistema.
 - **Docker**: Para facilitar a configuração do ambiente de desenvolvimento.
 
+## Configuração do Banco de Dados e Usuário Padrão
+
+### Instalação do PostgreSQL 17
+1. Baixe o instalador oficial em: [https://www.postgresql.org/download/windows/](https://www.postgresql.org/download/windows/)
+2. Siga o assistente de instalação e defina a senha do usuário `postgres` (administrador do banco).
+
+### Criação do banco e usuário para o sistema
+Abra o terminal do Windows e acesse o psql:
+```bash
+psql -U postgres
+```
+Depois, execute:
+```sql
+-- Crie o banco de dados
+CREATE DATABASE farmacia_db;
+
+-- Crie um usuário (exemplo: admin) com senha
+CREATE USER admin WITH PASSWORD 'admin';
+
+-- Dê permissão total ao usuário no banco
+GRANT ALL PRIVILEGES ON DATABASE farmacia_db TO admin;
+```
+
+### Configuração do acesso no projeto
+No arquivo `config/db.php`:
+```php
+return [
+    'class' => 'yii\\db\\Connection',
+    'dsn' => 'pgsql:host=localhost;port=5432;dbname=farmacia_db',
+    'username' => 'admin',
+    'password' => 'admin',
+    'charset' => 'utf8',
+];
+```
+
+### Como criar o usuário admin/admin no sistema
+Após rodar as migrations, gere o hash da senha "admin" usando o Yii2:
+```bash
+php -r "echo password_hash('admin', PASSWORD_BCRYPT) . PHP_EOL;"
+```
+O resultado será algo como:
+```
+$2y$13$wJQwQwQwQwQwQwQwQwQwQeQwQwQwQwQwQwQwQwQwQwQwQwQwQw
+```
+Use esse valor no comando SQL abaixo para inserir o usuário admin/admin:
+```sql
+INSERT INTO "user" (username, password_hash, role)
+VALUES ('admin', 'COLE_AQUI_O_HASH_GERADO', 'admin');
+```
+> Substitua `COLE_AQUI_O_HASH_GERADO` pelo valor gerado no comando acima.
+
 ## Banco de Dados
 
 Este sistema utiliza **PostgreSQL** como banco de dados relacional.
@@ -168,7 +219,7 @@ php yii migrate
 ```
 
 ### 7. Acessar o sistema
-- Abra o navegador e acesse: [http://localhost:8080](http://localhost:8080)
+- Abra o navegador e acesse: [http://localhost/](http://localhost/)
 
 ### 8. Usuário padrão (se houver)
 - Usuário: **admin**
