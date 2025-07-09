@@ -183,60 +183,81 @@ Esse projeto é uma ótima base para aprender sobre desenvolvimento web, MVC, au
 
 ---
 
-## Passo a Passo para Rodar o Projeto em Outro Computador
+## Instalação Rápida (Resumo)
 
-### 1. Pré-requisitos
-- **Git** instalado
-- **Docker** e **Docker Compose** instalados
-- (Opcional) **Composer** instalado, caso queira rodar sem Docker
-
-### 2. Clonar o repositório
+### 1. Clonar o repositório
 ```bash
-# Clone o projeto do GitHub
 git clone https://github.com/wesleyjosimar/farmacia-sistema-estoque.git
 cd farmacia-sistema-estoque
 ```
 
-### 3. Configurar variáveis de ambiente (se necessário)
-- Se existir um arquivo `.env.example`, copie para `.env` e ajuste as variáveis conforme seu ambiente.
-
-### 4. Subir o ambiente com Docker
-```bash
-docker-compose up -d
-```
-
-### 5. Instalar dependências PHP (caso rode sem Docker)
+### 2. Instalar dependências
 ```bash
 composer install
 ```
 
-### 6. Rodar as migrations para criar o banco de dados
+### 3. Configurar o banco de dados
+- Edite `config/db.php` com os dados do seu PostgreSQL.
+
+### 4. Rodar as migrations
 ```bash
-# Usando Docker:
-docker-compose exec app php yii migrate
-# Ou localmente:
 php yii migrate
 ```
 
-### 7. Acessar o sistema
-- Abra o navegador e acesse: [http://localhost/](http://localhost/)
+### 5. Criar usuário admin
+- Gere o hash da senha:
+```bash
+php -r "echo password_hash('admin', PASSWORD_BCRYPT) . PHP_EOL;"
+```
+- Insira no banco:
+```sql
+INSERT INTO "user" (username, password_hash, role) VALUES ('admin', 'COLE_AQUI_O_HASH_GERADO', 'admin');
+```
 
-### 8. Usuário padrão (se houver)
-- Usuário: **admin**
-- Senha: **admin**
-
-### 9. Dicas e Solução de Problemas
-- Se der erro de permissão, tente rodar o terminal como administrador.
-- Se o banco não conectar, confira as variáveis de ambiente e se o container do banco está rodando.
-- Para rodar testes, use:
-  ```bash
-  vendor/bin/codecept run
-  ```
-- Se precisar limpar arquivos temporários, apague as pastas `runtime/` e `web/assets/` (o Yii recria automaticamente).
+### 6. Rodar o sistema
+```bash
+php yii serve
+```
+Acesse: http://localhost:8080
 
 ---
 
-## Observações
-<!--
-Esse projeto é uma ótima base para aprender sobre desenvolvimento web, MVC, autenticação de usuários e integração com banco de dados. Qualquer dúvida, procure nos arquivos do projeto ou pergunte para o professor!
--->
+## Usando Docker (opcional)
+
+1. Instale Docker e Docker Compose.
+2. Rode:
+```bash
+docker-compose up -d
+```
+3. Acesse o sistema normalmente em http://localhost:8080
+
+---
+
+## Rodando os Testes
+
+- Testes unitários:
+```bash
+vendor/bin/codecept run unit --steps
+```
+- Testes de aceitação (se configurados):
+```bash
+vendor/bin/codecept run acceptance --steps
+```
+
+---
+
+## Solução de Problemas Comuns
+
+- **Erro de migration por integridade:**
+  - Limpe registros órfãos em stock_movement antes de rodar migrations de foreign key.
+- **Problemas de assets/CSS:**
+  - Rode `php yii asset` ou limpe a pasta `web/assets`.
+- **Permissões:**
+  - Garanta permissão de escrita em `runtime/` e `web/assets/`.
+- **Porta ocupada:**
+  - Use `php yii serve --port=8081` para outra porta.
+
+---
+
+## Dúvidas?
+Abra uma issue no GitHub ou consulte o professor/responsável.
