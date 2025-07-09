@@ -92,17 +92,21 @@ class UserController extends Controller
             // Se foi informado uma senha, gera o hash dela
             if (!empty($model->password)) {
                 $model->password_hash = Yii::$app->security->generatePasswordHash($model->password);
+                $model->password = null; // Limpa o campo password
             }
             // Gera uma chave de autenticação aleatória
             $model->auth_key = Yii::$app->security->generateRandomString();
             $model->created_at = time();
             $model->updated_at = time();
-            // Salva o usuário sem validação (false)
-            if ($model->save(false)) {
+            // Salva o usuário com validação
+            if ($model->save()) {
                 // Registra a ação no log de auditoria
                 \app\models\AuditLog::registrar('criar', 'User', $model->id, $model->attributes);
                 Yii::$app->session->setFlash('success', 'Usuário cadastrado com sucesso!');
                 return $this->redirect(['view', 'id' => $model->id]);
+            } else {
+                $errors = $model->getFirstErrors();
+                Yii::$app->session->setFlash('error', 'Erro ao cadastrar usuário: ' . implode(' ', $errors));
             }
         }
         // Se não salvou, exibe o formulário novamente
@@ -120,14 +124,18 @@ class UserController extends Controller
             // Se foi informada uma nova senha, gera o hash dela
             if (!empty($model->password)) {
                 $model->password_hash = Yii::$app->security->generatePasswordHash($model->password);
+                $model->password = null; // Limpa o campo password
             }
             $model->updated_at = time();
-            // Salva o usuário sem validação (false)
-            if ($model->save(false)) {
+            // Salva o usuário com validação
+            if ($model->save()) {
                 // Registra a edição no log de auditoria
                 \app\models\AuditLog::registrar('editar', 'User', $model->id, $model->attributes);
                 Yii::$app->session->setFlash('success', 'Usuário atualizado com sucesso!');
                 return $this->redirect(['view', 'id' => $model->id]);
+            } else {
+                $errors = $model->getFirstErrors();
+                Yii::$app->session->setFlash('error', 'Erro ao atualizar usuário: ' . implode(' ', $errors));
             }
         }
         // Se não salvou, exibe o formulário novamente

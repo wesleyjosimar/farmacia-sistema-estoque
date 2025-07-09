@@ -1,0 +1,1 @@
+DELETE FROM stock_movement WHERE user_id NOT IN (SELECT id FROM "user"); 

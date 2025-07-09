@@ -3,6 +3,13 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 ?>
 <div class="stock-movement-form">
+    <?php if ($model->hasErrors()): ?>
+        <div class="alert alert-danger">
+            <?php foreach ($model->getFirstErrors() as $error): ?>
+                <div><?= $error ?></div>
+            <?php endforeach; ?>
+        </div>
+    <?php endif; ?>
     <?php $form = ActiveForm::begin(); ?>
     <?= $form->field($model, 'product_id')->dropDownList(
         \yii\helpers\ArrayHelper::map($products, 'id', 'name'),

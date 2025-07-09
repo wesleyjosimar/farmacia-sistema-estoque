@@ -35,7 +35,17 @@ class StockMovement extends \yii\db\ActiveRecord
         return [
             [['product_id', 'user_id', 'type', 'quantity', 'created_at', 'reason'], 'required', 'message' => 'Este campo é obrigatório.'],
             [['product_id', 'user_id', 'quantity', 'created_at'], 'integer', 'message' => 'Informe um valor inteiro.'],
+            // quantity deve ser maior que zero
+            ['quantity', 'integer', 'min' => 1, 'tooSmall' => 'A quantidade deve ser maior que zero.'],
             [['type', 'reason'], 'string', 'max' => 20, 'tooLong' => 'Máximo de 20 caracteres.'],
+            // Validação customizada para saída não ultrapassar estoque (pode zerar)
+            ['quantity', function($attribute, $params, $validator) {
+                if ($this->type === 'saida' && $this->product) {
+                    if ($this->quantity > $this->product->quantity) {
+                        $this->addError($attribute, 'A quantidade de saída não pode ser maior que o estoque disponível.');
+                    }
+                }
+            }],
         ];
     }
 

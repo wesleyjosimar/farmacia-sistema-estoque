@@ -42,6 +42,8 @@ class AuditLog extends ActiveRecord
         $log->data = $data ? json_encode($data, JSON_UNESCAPED_UNICODE) : null;
         $log->ip = Yii::$app->request->userIP;
         $log->created_at = time();
-        $log->save(false);
+        if (!$log->save()) {
+            Yii::error('Erro ao salvar log de auditoria: ' . json_encode($log->getErrors()), __METHOD__);
+        }
     }
 } 

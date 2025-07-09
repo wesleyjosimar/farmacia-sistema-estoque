@@ -51,10 +51,10 @@ class HelloController extends Controller
         $user->auth_key = Yii::$app->security->generateRandomString();
         $user->role = 'admin';
         $user->updated_at = time();
-        if ($user->save(false)) {
+        if ($user->save()) {
             echo "Usuário admin criado/atualizado com sucesso!\n";
         } else {
-            echo "Erro ao salvar usuário admin.\n";
+            echo "Erro ao salvar usuário admin: ".json_encode($user->getFirstErrors())."\n";
         }
     }
 }
